@@ -8,12 +8,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Patient {
-    
+public class Medic {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Integer idPatient;
+    private Integer idMedic;
 
     @Column(length = 70, nullable = false)
     private String firstName;
@@ -21,17 +21,8 @@ public class Patient {
     @Column(length = 70, nullable = false)
     private String lastName;
 
-    @Column(length = 8, nullable = false)
-    private String dni;
+    @Column(length = 12, nullable = false)
+    private String codMed;
 
-    @Column(length = 150, nullable = false)
-    private String address;
-
-    @Column(length = 9, nullable = false)
-    private String phone;
-
-    @Column(length = 55, nullable = false, unique = true)
-    private String email;
-
-   
+    private String photoUrl;
 }
