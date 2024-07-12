@@ -6,7 +6,7 @@ public interface ICRUD<T, ID> {
 
     T save(T t);
 
-    T update(T t, ID id); // falta algo
+    T update(T t, ID id) throws Exception;
 
     List<T> findAll();
 

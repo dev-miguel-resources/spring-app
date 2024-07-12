@@ -5,6 +5,6 @@ import com.course.app_medic.models.Consult;
 // fachadas
 public interface IConsultService extends ICRUD<Consult, Integer> {
 
-    // fachada: faltan otros servicios
+    // fachada: faltan definiciones de otros servicios
     
 }
