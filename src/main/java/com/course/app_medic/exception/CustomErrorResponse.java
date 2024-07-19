@@ -17,6 +17,5 @@ public class CustomErrorResponse {
 
     private LocalDateTime datetime;
     private String message;
-    private String details;
-    
+    private String details;    
 }
