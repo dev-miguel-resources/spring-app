@@ -6,6 +6,7 @@ import java.util.List;
 import com.course.app_medic.models.Medic;
 import com.course.app_medic.models.Patient;
 import com.course.app_medic.models.Specialty;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -34,7 +35,7 @@ public class ConsultDTO {
     @NotNull
     private String numConsult;
 
-    // referencia faltante
+    @JsonManagedReference
     @NotNull
     private List<ConsultDetailDTO> details;
 

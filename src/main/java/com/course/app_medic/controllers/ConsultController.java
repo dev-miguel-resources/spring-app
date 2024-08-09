@@ -1,10 +1,12 @@
 package com.course.app_medic.controllers;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 //import java.util.List;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -18,13 +20,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.course.app_medic.dtos.ConsultDTO;
+import com.course.app_medic.dtos.ConsultListExamDTO;
+import com.course.app_medic.dtos.ConsultProcDTO;
+import com.course.app_medic.dtos.FilterConsultDTO;
+import com.course.app_medic.dtos.IConsultProcDTO;
 //import com.course.app_medic.dtos.ConsultDTO;
 //import com.course.app_medic.dtos.ConsultRecord;
 import com.course.app_medic.models.Consult;
+import com.course.app_medic.models.Exam;
 import com.course.app_medic.services.IConsultService;
 
 import jakarta.validation.Valid;
@@ -80,11 +88,12 @@ public class ConsultController {
     }
 
     @PostMapping
-    public ResponseEntity<ConsultDTO> save(@Valid @RequestBody ConsultDTO dto) {
-        Consult obj = service.save(convertToEntity(dto));
-        // return new ResponseEntity<>(obj, HttpStatus.CREATED);
+    public ResponseEntity<ConsultDTO> save(@Valid @RequestBody ConsultListExamDTO dto) {
+        Consult cons = this.convertToEntity(dto.getConsult());
         // patientes/1
-        // modificarlo
+        List<Exam> exams = mapper.map(dto.getLstExam(), new TypeToken<List<Exam>>() {
+        }.getType());
+        Consult obj = service.saveTransactional(cons, exams);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdConsult())
                 .toUri();
         return ResponseEntity.created(location).build();
@@ -122,11 +131,43 @@ public class ConsultController {
         return resource;
     }
 
-    /*
-     * @GetMapping("/pageable")
-     * public ResponseEntity<?> listByPage() {
-     * 
-     * }
-     */
+    @PostMapping("/search/others")
+    public ResponseEntity<List<ConsultDTO>> searchByOthers(@RequestBody FilterConsultDTO filterDTO) {
+        List<Consult> consults = service.search(filterDTO.getDni(), filterDTO.getFullname());
+
+        // forma convencional
+        List<ConsultDTO> consultDTOs = consults.stream().map(e -> mapper.map(e,
+                ConsultDTO.class)).toList();
+        // forma moderna
+        /*
+         * List<ConsultDTO> consultDTOs = mapper.map(consults, new
+         * TypeToken<List<ConsultDTO>>() {
+         * }.getType());
+         */
+
+        return new ResponseEntity<>(consultDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/date")
+    public ResponseEntity<List<ConsultDTO>> searchByDates(
+            @RequestParam(value = "date1", defaultValue = "2024-08-08", required = true) String date1,
+            @RequestParam(value = "date2", required = true) String date2) {
+        List<Consult> consults = service.searchByDates(LocalDateTime.parse(date1), LocalDateTime.parse(date2));
+        List<ConsultDTO> consultDTOs = mapper.map(consults, new TypeToken<List<ConsultDTO>>() {
+        }.getType());
+        return new ResponseEntity<>(consultDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping("/callProcedureNative")
+    public ResponseEntity<List<ConsultProcDTO>> callProcedureOrFunctionNative() {
+        List<ConsultProcDTO> consults = service.callProcedureOrFunctionNative();
+        return new ResponseEntity<>(consults, HttpStatus.OK);
+    }
+
+    @GetMapping("/callProcedureProjection")
+    public ResponseEntity<List<IConsultProcDTO>> callProcedureOrFunctionProjection() {
+        List<IConsultProcDTO> consults = service.callProcedureOrFunctionProjection();
+        return new ResponseEntity<>(consults, HttpStatus.OK);
+    }
 
 }

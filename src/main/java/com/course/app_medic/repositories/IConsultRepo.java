@@ -12,7 +12,7 @@ import com.course.app_medic.models.Consult;
 public interface IConsultRepo extends IGenericRepo<Consult, Integer> {
 
     // 1. una query de búsqueda de consultas mediante dni y fullname del paciente
-    @Query("FROM Consult c WHERE c.patient.dni = :dni OR LOWER(c.patient.firstname) LIKE %:fullname% 0R LOWER(c.patient.lastname) LIKE %:lastname%")
+    @Query("FROM Consult c WHERE c.patient.dni = :dni OR LOWER(c.patient.firstName) LIKE %:fullname% OR LOWER(c.patient.lastName) LIKE %:fullname%")
     List<Consult> search(@Param("dni") String dni, @Param("fullname") String fullname);
 
     // 2. lista de consultas mediante un rango de fechas

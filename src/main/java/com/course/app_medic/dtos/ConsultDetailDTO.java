@@ -1,5 +1,7 @@
 package com.course.app_medic.dtos;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -18,7 +20,7 @@ public class ConsultDetailDTO {
     @NotNull
     private String treatment;
 
-    // referencia
+    @JsonBackReference
     private ConsultDTO consult;
 
 }
