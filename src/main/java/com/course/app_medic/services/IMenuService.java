@@ -1,10 +1,12 @@
 package com.course.app_medic.services;
 
+import java.util.List;
+
 import com.course.app_medic.models.Menu;
 
 // fachadas
 public interface IMenuService extends ICRUD<Menu, Integer> {
 
-    // pendiente la definición de un servicio
-    
+    List<Menu> getMenusByUsername(String username);
+
 }

@@ -1,5 +1,7 @@
 package com.course.app_medic.services.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.course.app_medic.models.Menu;
@@ -20,6 +22,9 @@ public class MenuServiceImpl extends CRUDImpl<Menu, Integer> implements IMenuSer
         return repo;
     }
 
-    // pendiente la implementación de un servicio
-
+    // falta vincularlo con el usuario de spring security
+    @Override
+    public List<Menu> getMenusByUsername(String username) {
+        return repo.getMenusByUsername(username);
+    }
 }

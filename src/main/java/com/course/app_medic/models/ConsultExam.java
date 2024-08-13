@@ -16,11 +16,9 @@ public class ConsultExam {
     @Id
     private Exam exam;
 
-    /*
-     * public ConsultExam(Exam exam) {
-     * this.exam = exam;
-     * }
-     */
+    public ConsultExam(Exam exam) {
+        this.exam = exam;
+    }
 
     // FORMA 1 VS FORMA 2 (Simplificada)
     // + Código y archivos (Desventaja)

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
-//import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -170,4 +170,9 @@ public class ConsultController {
         return new ResponseEntity<>(consults, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/generateReport", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> generateReport() throws Exception {
+        byte[] data = service.generateReport();
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
 }
